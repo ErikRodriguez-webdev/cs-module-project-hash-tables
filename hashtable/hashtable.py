@@ -27,7 +27,6 @@ class HashTable:
         self.capacity = [None] * capacity
 
     def get_num_slots(self):
-        pass
         """
         Return the length of the list you're using to hold the hash
         table data. (Not the number of items stored in the hash table,
@@ -38,6 +37,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # return length of capacity
+        return len(self.capacity)
 
     def get_load_factor(self):
         pass
@@ -64,9 +65,12 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        # hash is 5381
         hash = 5381
 
+        # loop through all letters in key passed in
         for letter in key:
+            # hash is now set to 5381 * 33 and add method ord to letter
             hash = (hash * 33) + ord(letter)
 
         return hash
@@ -76,8 +80,8 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        # return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        # return self.fnv1(key) % length of self.capacity
+        return self.djb2(key) % len(self.capacity)
 
     def put(self, key, value):
         pass
@@ -89,6 +93,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # set new_hash to create new hashtableentry and pass in key and value arguments to initialize
+
+        # set hash_index to self.hash_index and pass in new_hash.key
+
+        # now self.capacity(hash_index) is set to the new_hash created which will store both the key, value and next which points to none
 
     def delete(self, key):
         pass
