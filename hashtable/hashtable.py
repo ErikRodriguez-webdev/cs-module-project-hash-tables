@@ -21,7 +21,7 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity=8):
+    def __init__(self, capacity):
         # Your code here
         # this creates our list multiplied with the capacity passed in
         self.capacity = [None] * capacity
@@ -84,7 +84,6 @@ class HashTable:
         return self.djb2(key) % len(self.capacity)
 
     def put(self, key, value):
-        pass
         """
         Store the value with the given key.
 
@@ -94,13 +93,15 @@ class HashTable:
         """
         # Your code here
         # set new_hash to create new hashtableentry and pass in key and value arguments to initialize
+        new_hash = HashTableEntry(key, value)
 
-        # set hash_index to self.hash_index and pass in new_hash.key
+        # set hash_index_num to self.hash_index and pass in new_hash.key
+        hash_index_num = self.hash_index(key)
 
-        # now self.capacity(hash_index) is set to the new_hash created which will store both the key, value and next which points to none
+        # now self.capacity[hash_index] is set to the new_hash created which will store both the key, value and next which points to none
+        self.capacity[hash_index_num] = new_hash
 
     def delete(self, key):
-        pass
         """
         Remove the value stored with the given key.
 
@@ -109,9 +110,18 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # set hash_index_num to self.hash_index(key)
+        hash_index_num = self.hash_index(key)
+
+        # check if self.capacity[hash_index_num] is not None
+        if self.capacity[hash_index_num] is not None:
+            # then set self.capacity[hash_index_num] = None
+            self.capacity[hash_index_num] = None
+        # else, then return print("Key not found.")
+        else:
+            print("Key not found.")
 
     def get(self, key):
-        pass
         """
         Retrieve the value stored with the given key.
 
@@ -120,6 +130,17 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # set hash_index_num to hash_index(key)
+        hash_index_num = self.hash_index(key)
+
+        # check if self.capacity[hash_index_num] is not None
+        if self.capacity[hash_index_num] is not None:
+            # then return self.capacity[hash_index_num].value
+            return self.capacity[hash_index_num].value
+
+        # else, return none because key was not found
+        else:
+            return None
 
     def resize(self, new_capacity):
         pass
