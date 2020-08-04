@@ -12,6 +12,38 @@ class HashTableEntry:
 # Hash table can't have fewer than this many slots
 # MIN_CAPACITY = 8
 
+# linked list to help prevent collisions of multiple hash nodes at an index in our hashtable
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def add_to_tail(self, node):
+        # check if linkedlist is empty and add node
+        if self.head is None:
+            self.head = node
+
+        # linkedlist is not empty
+        # set current to self.head
+        current = self.head
+
+      # while loop (while true)
+        while True:
+            # check if current.key is equal to key
+            if current.key == node.key:
+                # then update by setting current.value to node.value
+                current.value = node.value
+                print('Found existing node and updated value')
+                break
+            # check if current.next is None
+            if current.next is None:
+                # then insert by setting current.next to node
+                current.next = node
+                print('Successfully added new node to tail')
+                break
+
+            # now set current to current.next
+            current = current.next
+
 
 class HashTable:
     """
@@ -98,8 +130,16 @@ class HashTable:
         # set hash_index_num to self.hash_index and pass in new_hash.key
         hash_index_num = self.hash_index(key)
 
-        # now self.capacity[hash_index] is set to the new_hash created which will store both the key, value and next which points to none
-        self.capacity[hash_index_num] = new_hash
+        # check if self.capacity[hash_index_num] is None
+        if self.capacity[hash_index_num] == None:
+            # initialize a linked list and set it to empty capacity index
+            linked_list = LinkedList()
+            linked_list.add_to_tail(new_hash)
+            # now self.capacity[hash_index] is set to the new_hash created which will store both the key, value and next which points to none
+            self.capacity[hash_index_num] = linked_list
+        # else, then insert node to linkedlist at index
+        else:
+            self.capacity[hash_index_num].add_to_tail(new_hash)
 
     def delete(self, key):
         """
