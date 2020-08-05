@@ -19,7 +19,7 @@ class LinkedList:
 
     def add_to_tail(self, node):
         # check if linkedlist is empty and add node
-        if self.head is None:
+        if self.head == None:
             self.head = node
 
         # linkedlist is not empty
@@ -40,6 +40,59 @@ class LinkedList:
                 current.next = node
                 print('Successfully added new node to tail')
                 break
+
+            # now set current to current.next
+            current = current.next
+
+    def remove(self, key):
+        # check if linkedlist is empty return because there is nothing to remove
+        if self.head == None:
+            return
+
+        # check if linklist head pointer is the item to remove
+        if self.head.key == key:
+            self.head = self.head.next
+
+        # linkedlist is more than two items
+        # set current to self.head
+        current = self.head
+
+      # while loop (while true)
+        while True:
+            # check if current.next is None
+            if current == None:
+                print('Key not found')
+                break
+            # check if current.next.key is equal to key
+            if current.next.key == key:
+                # set current.next = current.next.next
+                current.next = current.next.next
+                print('Existing node was deleted')
+                break
+
+            # now set current to current.next
+            current = current.next
+
+    def find_value(self, key):
+        # check if self.head == none
+        if self.head == None:
+            # return because no nodes in link
+            return
+
+        # linkedlist is not empty
+        # set current to self.head
+        current = self.head
+
+      # while loop (while true)
+        while True:
+            # check if current.key is equal to key
+            if current.key == key:
+                # then return current value
+                return current.value
+            # check if current.next is None
+            if current.next is None:
+                # then return with print saying not found
+                return print('Key not found')
 
             # now set current to current.next
             current = current.next
@@ -153,13 +206,13 @@ class HashTable:
         # set hash_index_num to self.hash_index(key)
         hash_index_num = self.hash_index(key)
 
-        # check if self.capacity[hash_index_num] is not None
-        if self.capacity[hash_index_num] is not None:
-            # then set self.capacity[hash_index_num] = None
-            self.capacity[hash_index_num] = None
-        # else, then return print("Key not found.")
+        # check if self.capacity[hash_index_num] is None, then no key found
+        if self.capacity[hash_index_num] == None:
+            return print("Key was not found")
         else:
-            print("Key not found.")
+            # then use self.capacity[hash_index_num] remove method on linked list to find key
+            linked_list = self.capacity[hash_index_num]
+            linked_list.remove(key)
 
     def get(self, key):
         """
@@ -175,8 +228,8 @@ class HashTable:
 
         # check if self.capacity[hash_index_num] is not None
         if self.capacity[hash_index_num] is not None:
-            # then return self.capacity[hash_index_num].value
-            return self.capacity[hash_index_num].value
+            # then return the value from key
+            return self.capacity[hash_index_num].find_value(key)
 
         # else, return none because key was not found
         else:
