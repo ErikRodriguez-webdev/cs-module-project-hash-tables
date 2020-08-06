@@ -47,7 +47,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        return self.count / self.get_num_slots()
+        return self.count / len(self.capacity)
 
     # def fnv1(self, key):
     #     pass
@@ -92,8 +92,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        if self.get_load_factor >= 0.7:
-            self.resize(2)
+        if self.get_load_factor() >= 0.7:
+            self.resize(self.get_num_slots() * 2)
 
         # create a node holding key and value
         new_node = HashTableEntry(key, value)
@@ -192,11 +192,19 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # set temp_list to [None] * (len(self.capacity) * new_capacity)
+        # set copy_hash_table to self.capacity
+        copy_hash_table = self.capacity
+        # set self.capacity to [None] * new_capacity to get new doubled hashtable
+        self.capacity = [None] * new_capacity
 
-        # for loop (range of self.capacity)
-        # check if item in array is not none
-        # if its not none the rehash first item
+        # for loop item (copy_hash_table)
+        for item in copy_hash_table:
+            # check if item in array is not none
+            if item is not None:
+                # create new_hash_index variable with a rehash of key using hash_index method
+                new_hash_index = self.hash_index(item.key)
+                # set self.capacity[new_hash_index] to item which will still point to next
+                self.capacity[new_hash_index] = item
 
 
 if __name__ == "__main__":
