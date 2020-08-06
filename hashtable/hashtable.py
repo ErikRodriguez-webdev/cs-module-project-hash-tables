@@ -12,92 +12,6 @@ class HashTableEntry:
 # Hash table can't have fewer than this many slots
 # MIN_CAPACITY = 8
 
-# linked list to help prevent collisions of multiple hash nodes at an index in our hashtable
-class LinkedList:
-    def __init__(self):
-        self.head = None
-
-    def add_to_tail(self, node):
-        # check if linkedlist is empty and add node
-        if self.head == None:
-            self.head = node
-
-        # linkedlist is not empty
-        # set current to self.head
-        current = self.head
-
-      # while loop (while true)
-        while True:
-            # check if current.key is equal to key
-            if current.key == node.key:
-                # then update by setting current.value to node.value
-                current.value = node.value
-                print('Found existing node and updated value')
-                break
-            # check if current.next is None
-            if current.next is None:
-                # then insert by setting current.next to node
-                current.next = node
-                print('Successfully added new node to tail')
-                break
-
-            # now set current to current.next
-            current = current.next
-
-    def remove(self, key):
-        # check if linkedlist is empty return because there is nothing to remove
-        if self.head == None:
-            return
-
-        # check if linklist head pointer is the item to remove
-        if self.head.key == key:
-            self.head = self.head.next
-
-        # linkedlist is more than two items
-        # set current to self.head
-        current = self.head
-
-      # while loop (while true)
-        while True:
-            # check if current.next is None
-            if current == None:
-                print('Key not found')
-                break
-            # check if current.next.key is equal to key
-            if current.next.key == key:
-                # set current.next = current.next.next
-                current.next = current.next.next
-                print('Existing node was deleted')
-                break
-
-            # now set current to current.next
-            current = current.next
-
-    def find_value(self, key):
-        # check if self.head == none
-        if self.head == None:
-            # return because no nodes in link
-            return
-
-        # linkedlist is not empty
-        # set current to self.head
-        current = self.head
-
-      # while loop (while true)
-        while True:
-            # check if current.key is equal to key
-            if current.key == key:
-                # then return current value
-                return current.value
-            # check if current.next is None
-            if current.next is None:
-                # then return with print saying not found
-                return print('Key not found')
-
-            # now set current to current.next
-            current = current.next
-
-
 class HashTable:
     """
     A hash table that with `capacity` buckets
@@ -110,6 +24,7 @@ class HashTable:
         # Your code here
         # this creates our list multiplied with the capacity passed in
         self.capacity = [None] * capacity
+        self.count = 0
 
     def get_num_slots(self):
         """
@@ -177,22 +92,35 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # set new_hash to create new hashtableentry and pass in key and value arguments to initialize
-        new_hash = HashTableEntry(key, value)
+        # create a node holding key and value
+        new_node = HashTableEntry(key, value)
 
-        # set hash_index_num to self.hash_index and pass in new_hash.key
-        hash_index_num = self.hash_index(key)
+        # get hash using key
+        hash_index = self.hash_index(key)
 
-        # check if self.capacity[hash_index_num] is None
-        if self.capacity[hash_index_num] == None:
-            # initialize a linked list and set it to empty capacity index
-            linked_list = LinkedList()
-            linked_list.add_to_tail(new_hash)
-            # now self.capacity[hash_index] is set to the new_hash created which will store both the key, value and next which points to none
-            self.capacity[hash_index_num] = linked_list
-        # else, then insert node to linkedlist at index
-        else:
-            self.capacity[hash_index_num].add_to_tail(new_hash)
+        # check if self.capacity[hash_index] is None
+        if self.capacity[hash_index] is None:
+            # then set self.capacity[hash_index] to the new_node
+            self.capacity[hash_index] = new_node
+
+        # set current to self.capacity[hash_index]
+        current = self.capacity[hash_index]
+
+        # while loop (True)
+        while True:
+            # check if current.next is None
+            if current.key == key:
+                current.value = value
+                break
+
+            if current.next is None:
+                # then set current.next to new_node
+                current.next = new_node
+                # break
+                break
+
+            # set current to current.next
+            current = current.next
 
     def delete(self, key):
         """
@@ -204,15 +132,22 @@ class HashTable:
         """
         # Your code here
         # set hash_index_num to self.hash_index(key)
-        hash_index_num = self.hash_index(key)
+        hash_index = self.hash_index(key)
 
-        # check if self.capacity[hash_index_num] is None, then no key found
-        if self.capacity[hash_index_num] == None:
-            return print("Key was not found")
-        else:
-            # then use self.capacity[hash_index_num] remove method on linked list to find key
-            linked_list = self.capacity[hash_index_num]
-            linked_list.remove(key)
+        if self.capacity[hash_index] is None:
+            return print("Key is not found")
+
+        current = self.capacity[hash_index]
+
+        while True:
+            if current.key == key:
+                current.value = None
+                break
+
+            if current.next is None and current.key != key:
+                return print('hey, key is not found')
+
+            current = current.next
 
     def get(self, key):
         """
@@ -224,16 +159,25 @@ class HashTable:
         """
         # Your code here
         # set hash_index_num to hash_index(key)
-        hash_index_num = self.hash_index(key)
+        hash_index = self.hash_index(key)
 
-        # check if self.capacity[hash_index_num] is not None
-        if self.capacity[hash_index_num] is not None:
-            # then return the value from key
-            return self.capacity[hash_index_num].find_value(key)
+        if self.capacity[hash_index] is None:
+            return
 
-        # else, return none because key was not found
-        else:
-            return None
+        current = self.capacity[hash_index]
+
+        # while loop (True)
+        while True:
+            # check if current.next is None
+            if current.next is None and current.key != key:
+                return
+
+            if current.key == key:
+                # then set current.next to new_node
+                return current.value
+
+            # set current to current.next
+            current = current.next
 
     def resize(self, new_capacity):
         pass
