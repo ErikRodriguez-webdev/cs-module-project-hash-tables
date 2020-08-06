@@ -41,13 +41,13 @@ class HashTable:
         return len(self.capacity)
 
     def get_load_factor(self):
-        pass
         """
         Return the load factor for this hash table.
 
         Implement this.
         """
         # Your code here
+        return self.count / self.get_num_slots()
 
     # def fnv1(self, key):
     #     pass
@@ -92,6 +92,9 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        if self.get_load_factor >= 0.7:
+            self.resize(2)
+
         # create a node holding key and value
         new_node = HashTableEntry(key, value)
 
@@ -102,6 +105,7 @@ class HashTable:
         if self.capacity[hash_index] is None:
             # then set self.capacity[hash_index] to the new_node
             self.capacity[hash_index] = new_node
+            self.count += 1
 
         # set current to self.capacity[hash_index]
         current = self.capacity[hash_index]
@@ -116,6 +120,7 @@ class HashTable:
             if current.next is None:
                 # then set current.next to new_node
                 current.next = new_node
+                self.count += 1
                 # break
                 break
 
@@ -180,7 +185,6 @@ class HashTable:
             current = current.next
 
     def resize(self, new_capacity):
-        pass
         """
         Changes the capacity of the hash table and
         rehashes all key/value pairs.
@@ -188,6 +192,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # set temp_list to [None] * (len(self.capacity) * new_capacity)
+
+        # for loop (range of self.capacity)
+        # check if item in array is not none
+        # if its not none the rehash first item
 
 
 if __name__ == "__main__":
