@@ -47,33 +47,42 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        return self.count / len(self.capacity)
+        return self.count / self.get_num_slots()
 
-    # def fnv1(self, key):
-    #     pass
-    #     """
-    #     FNV-1 Hash, 64-bit
-
-    #     Implement this, and/or DJB2.
-    #     """
-    #     # Your code here
-
-    def djb2(self, key):
+    def fnv1(self, key):
         """
-        DJB2 hash, 32-bit
+        FNV-1 Hash, 64-bit
 
-        Implement this, and/or FNV-1.
+        Implement this, and/or DJB2.
         """
         # Your code here
-        # hash is 5381
-        hash = 5381
+        # hash := FNV_offset_basis 64 bit value
+        hash = 14695981039346656037
 
-        # loop through all letters in key passed in
         for letter in key:
-            # hash is now set to 5381 * 33 and add method ord to letter
-            hash = (hash * 33) + ord(letter)
+            # hash := hash × FNV_prime 64 bit value
+            hash = hash * 1099511628211
+            # hash := hash XOR byte_of_data
+            hash = hash ^ ord(letter)
 
-        return hash
+            return hash
+
+    # def djb2(self, key):
+    #     """
+    #     DJB2 hash, 32-bit
+
+    #     Implement this, and/or FNV-1.
+    #     """
+    #     # Your code here
+    #     # hash is 5381
+    #     hash = 5381
+
+    #     # loop through all letters in key passed in
+    #     for letter in key:
+    #         # hash is now set to 5381 * 33 and add method ord to letter
+    #         hash = (hash * 33) + ord(letter)
+
+    #     return hash
 
     def hash_index(self, key):
         """
@@ -81,7 +90,8 @@ class HashTable:
         between within the storage capacity of the hash table.
         """
         # return self.fnv1(key) % length of self.capacity
-        return self.djb2(key) % len(self.capacity)
+        # return self.djb2(key) % self.get_num_slots()
+        return self.fnv1(key) % self.get_num_slots()
 
     def put(self, key, value):
         """
