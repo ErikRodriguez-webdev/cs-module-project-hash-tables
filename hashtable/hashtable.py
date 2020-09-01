@@ -24,6 +24,7 @@ class HashTable:
         # Your code here
         # this creates our list multiplied with the capacity passed in
         self.capacity = [None] * capacity
+        # this counts all hashtable entries stored in hashtable
         self.count = 0
 
     def get_num_slots(self):
@@ -146,6 +147,12 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # check if load factor is less than or equal to 0.2
+        # and
+        # current length of hashtable list divided by 2 is not 8
+        if self.get_load_factor() < 0.2 and self.get_num_slots() / 2 != 8:
+            self.resize(self.get_num_slots() / 2)
+
         # set hash_index_num to self.hash_index(key)
         hash_index = self.hash_index(key)
 
