@@ -150,8 +150,9 @@ class HashTable:
         # check if load factor is less than or equal to 0.2
         # and
         # current length of hashtable list divided by 2 is not 8
-        if self.get_load_factor() < 0.2 and self.get_num_slots() / 2 != 8:
-            self.resize(self.get_num_slots() / 2)
+        # not really working
+        # if self.get_load_factor() < 0.2 and self.get_num_slots() / 2 != 8:
+        #     self.resize(self.get_num_slots() / 2)
 
         # set hash_index_num to self.hash_index(key)
         hash_index = self.hash_index(key)
